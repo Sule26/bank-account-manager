@@ -1,0 +1,21 @@
+Bank -> Login -> CurrentAccount/SavingAccount -> User |->| Cpf
+
+User:
+    cpf string -> Principal Key
+    first_name string
+    last_name string
+    age int
+
+Account:
+    IdAccount Unique Identifier -> Principal Key
+    Cpf str -> Foreign Key
+    balance money
+
+Login:
+    IdLogin Unique Identifier -> Principal Key
+    Login str
+    Password str
+
+Bank:
+    IdBank Unique Identifier -> Principal Key
+    Name str
