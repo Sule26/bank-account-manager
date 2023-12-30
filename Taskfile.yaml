@@ -5,6 +5,11 @@ vars:
   MICROMAMBA_ENV: bank-system
   MICROMAMBA_FILE: "{{.MICROMAMBA_ENV}}.env.yaml"
 tasks:
+  env:set:
+    sources:
+      - "{{.MICROMAMBA_FILE}}"
+      - requirements.txt
+    cmd: micromamba create -f '{{.MICROMAMBA_FILE}}' -y
   mysql:up:
     dir: ./databases/mysql
     cmd: docker compose up -d
