@@ -1,0 +1,31 @@
+version: "3"
+dotenv:
+  - .local.env
+vars:
+  MICROMAMBA_ENV: bank-system
+  MICROMAMBA_FILE: "{{.MICROMAMBA_ENV}}.env.yaml"
+tasks:
+  mysql:up:
+    dir: ./databases/mysql
+    cmd: docker compose up -d
+  mysql:down:
+    dir: ./databases/mysql
+    cmd: docker compose down
+  mysql:delete:volume: docker volume rm mysql_data
+  mysql:restart:
+    cmds:
+      - task: mysql:down
+      - task: mysql:delete:volume
+      - task: mysql:up
+  postgres:up:
+    dir: ./databases/postgres
+    cmd: docker compose up -d
+  postgres:down:
+    dir: ./databases/postgres
+    cmd: docker compose down
+  postgres:delete:volume: docker volume rm postgres_data
+  postgres:restart:
+    cmds:
+      - task: postgres:down
+      - task: postgres:delete:volume
+      - task: postgres:up
