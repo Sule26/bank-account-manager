@@ -1,5 +1,4 @@
-from src.modules.cpf.cpf import Cpf
-from src.database.bankdatabase import BankDatabase
+
 from PIL import ImageTk, Image
 import tkinter as tk
 
