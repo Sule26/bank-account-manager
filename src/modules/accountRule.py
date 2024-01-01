@@ -6,17 +6,17 @@ import sqlalchemy.orm
 class AccountRule(Base):
     __tablename__ = "AccountRule"
 
-    account_rule_id = sqlalchemy.Column(
+    __id = sqlalchemy.Column(
         "Id",
         sqlalchemy.Uuid,
         primary_key=True,
     )
-    withdraw_fee = sqlalchemy.Column(
+    __withdraw_fee = sqlalchemy.Column(
         "WithdrawFee",
         sqlalchemy.Float,
         nullable=False,
     )
-    minimum_initial_balance = sqlalchemy.Column(
+    __minimum_initial_balance = sqlalchemy.Column(
         "MinimumInitialBalance",
         sqlalchemy.Float,
         nullable=False,
@@ -27,12 +27,8 @@ class AccountRule(Base):
         withdraw_fee: float,
         minimum_initial_balance: float,
     ) -> None:
-        self.withdraw_fee = withdraw_fee
-        self.minimum_initial_balance = minimum_initial_balance
+        self.__withdraw_fee = withdraw_fee
+        self.__minimum_initial_balance = minimum_initial_balance
 
-    def __repr__(self) -> str:
-        return f"""
-        ({self.account_rule_id}) 
-        withdraw Fee: {self.withdraw_fee}
-        Minimum Initial Balance: {self.minimum_initial_balance}
-        """
+    def getId(self) -> str:
+        return self.__id

@@ -12,22 +12,29 @@ class nameEnum(enum.Enum):
 class AccountType(Base):
     __tablename__ = "AccountType"
 
+    __id = sqlalchemy.Column(
+        "Id",
     account_type_id = sqlalchemy.Column("Id", sqlalchemy.Uuid, primary_key=True)
     bank_id = sqlalchemy.Column(
+    __bank_id = sqlalchemy.Column(
         "BankId",
         sqlalchemy.Uuid,
         sqlalchemy.ForeignKey("Bank.Id", ondelete="CASCADE"),
         nullable=False,
     )
 
-    account_rule_id = sqlalchemy.Column(
+    __account_rule_id = sqlalchemy.Column(
         "AccountRuleId",
         sqlalchemy.Uuid,
         sqlalchemy.ForeignKey("AccountRule.Id", ondelete="CASCADE"),
         nullable=False,
     )
 
-    name = sqlalchemy.Column("Name", sqlalchemy.Enum(nameEnum), nullable=False)
+    __name = sqlalchemy.Column(
+        "Name",
+        sqlalchemy.String,
+        nullable=False,
+    )
 
     def __init__(
         self,
@@ -35,14 +42,9 @@ class AccountType(Base):
         account_rule_id: str,
         name: str,
     ) -> None:
-        self.bank_id = bank_id
-        self.account_rule_id = account_rule_id
-        self.name = name
+        self.__bank_id = bank_id
+        self.__account_rule_id = account_rule_id
+        self.__name = name
 
-    def __repr__(self) -> str:
-        return f"""
-        ({self.account_type_id})
-        BankId: {self.bank_id}
-        AccountRuleId: {self.account_rule_id}
-        Name: {self.name}
-        """
+    def getId(self) -> str:
+        return self.__id

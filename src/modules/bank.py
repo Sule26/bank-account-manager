@@ -6,14 +6,14 @@ import sqlalchemy.orm
 class Bank(Base):
     __tablename__ = "Bank"
 
-    bank_id = sqlalchemy.Column(
+    __id = sqlalchemy.Column(
         "Id",
         sqlalchemy.Uuid,
         primary_key=True,
     )
-    name = sqlalchemy.Column(
+    __name = sqlalchemy.Column(
         "Name",
-        sqlalchemy.Integer,
+        sqlalchemy.String,
         nullable=False,
     )
 
@@ -21,7 +21,10 @@ class Bank(Base):
         self,
         name: str,
     ) -> None:
-        self.name = name
+        self.__name = name
 
-    def __repr__(self) -> str:
-        return f"({self.bank_id}) -> {self.name}"
+    def getName(self) -> str:
+        return self.__name
+
+    def getId(self) -> str:
+        return self.__id
