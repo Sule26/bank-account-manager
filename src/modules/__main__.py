@@ -1,4 +1,4 @@
-from .uris import POSTGRES_URI
+from .uris import POSTGRES_URI, MYSQL_URI
 from .bank import Bank
 from .user import User
 from .accountRule import AccountRule
@@ -8,11 +8,17 @@ from .base import Base
 import sqlalchemy.orm
 from loguru import logger
 
-postgres_engine = sqlalchemy.create_engine(url=POSTGRES_URI)
+ACCOUNT_TYPES = ["Checking Account", "Saving Account"]
 
-Base.metadata.create_all(bind=postgres_engine)
+engine = sqlalchemy.create_engine(url=POSTGRES_URI)
 
-Session = sqlalchemy.orm.sessionmaker(bind=postgres_engine)
+#TODO: Solve the issues related to MySQL Syntax
+# engine = sqlalchemy.create_engine(url=MYSQL_URI)
+
+
+Base.metadata.create_all(bind=engine)
+
+Session = sqlalchemy.orm.sessionmaker(bind=engine)
 session = Session()
 
 # Creating Banks
@@ -86,25 +92,25 @@ savingSantanderRule = session.get(
 checkingItau = AccountType(
     bank_id=itauBank.getId(),
     account_rule_id=checkingItauRule.getId(),
-    name="Checking Account",
+    name=ACCOUNT_TYPES[0],
 )
 
 savingItau = AccountType(
     bank_id=itauBank.getId(),
     account_rule_id=savingItauRule.getId(),
-    name="Saving Account",
+    name=ACCOUNT_TYPES[1],
 )
 
 checkingSantander = AccountType(
     bank_id=santanderBank.getId(),
     account_rule_id=checkingSantanderRule.getId(),
-    name="Checking Account",
+    name=ACCOUNT_TYPES[0],
 )
 
 savingSantander = AccountType(
     bank_id=santanderBank.getId(),
     account_rule_id=savingSantanderRule.getId(),
-    name="Saving Account",
+    name=ACCOUNT_TYPES[1],
 )
 
 # Adding Account Types to the database

@@ -35,7 +35,7 @@ class AccountType(Base):
 
     __name = sqlalchemy.Column(
         "Name",
-        sqlalchemy.String,
+        sqlalchemy.String(25),
         nullable=False,
     )
 

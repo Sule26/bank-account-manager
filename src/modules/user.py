@@ -16,12 +16,12 @@ class User(Base):
     )
     __first_name = sqlalchemy.Column(
         "FirstName",
-        sqlalchemy.String,
+        sqlalchemy.String(25),
         nullable=False,
     )
     __last_name = sqlalchemy.Column(
         "LastName",
-        sqlalchemy.String,
+        sqlalchemy.String(25),
         nullable=False,
     )
     __cpf = sqlalchemy.Column(
@@ -31,17 +31,17 @@ class User(Base):
     )
     __username = sqlalchemy.Column(
         "Username",
-        sqlalchemy.String,
+        sqlalchemy.String(25),
         nullable=True,
     )
     __password = sqlalchemy.Column(
         "Password",
-        sqlalchemy.String,
+        sqlalchemy.String(25),
         nullable=True,
     )
     __email = sqlalchemy.Column(
         "Email",
-        sqlalchemy.String,
+        sqlalchemy.String(100),
         nullable=True,
     )
     __phone = sqlalchemy.Column(
