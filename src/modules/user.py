@@ -2,6 +2,7 @@ from .base import Base
 from datetime import datetime
 import sqlalchemy
 import sqlalchemy.orm
+import uuid
 
 
 class User(Base):
@@ -9,8 +10,9 @@ class User(Base):
 
     __id = sqlalchemy.Column(
         "Id",
-        sqlalchemy.Uuid,
+        sqlalchemy.UUID(as_uuid=True),
         primary_key=True,
+        default=uuid.uuid4,
     )
     __first_name = sqlalchemy.Column(
         "FirstName",

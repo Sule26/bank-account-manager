@@ -1,12 +1,18 @@
 from .base import Base
 import sqlalchemy
 import sqlalchemy.orm
+import uuid
 
 
 class Account(Base):
     __tablename__ = "Account"
 
     __id = sqlalchemy.Column(
+        "Id",
+        sqlalchemy.UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
     __bank_id = sqlalchemy.Column(
         "BankId",
         sqlalchemy.Uuid,

@@ -2,11 +2,12 @@ from .base import Base
 import sqlalchemy
 import sqlalchemy.orm
 import enum
+import uuid
 
 
-class nameEnum(enum.Enum):
-    current_account = "Current Account"
-    saving_account = "Saving_Account"
+# class nameEnum(enum.Enum):
+#     current_account = "Checking Account"
+#     saving_account = "Saving_Account"
 
 
 class AccountType(Base):
@@ -14,8 +15,10 @@ class AccountType(Base):
 
     __id = sqlalchemy.Column(
         "Id",
-    account_type_id = sqlalchemy.Column("Id", sqlalchemy.Uuid, primary_key=True)
-    bank_id = sqlalchemy.Column(
+        sqlalchemy.UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
     __bank_id = sqlalchemy.Column(
         "BankId",
         sqlalchemy.Uuid,

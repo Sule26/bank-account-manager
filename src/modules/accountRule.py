@@ -1,6 +1,7 @@
 from .base import Base
 import sqlalchemy
 import sqlalchemy.orm
+import uuid
 
 
 class AccountRule(Base):
@@ -8,8 +9,9 @@ class AccountRule(Base):
 
     __id = sqlalchemy.Column(
         "Id",
-        sqlalchemy.Uuid,
+        sqlalchemy.UUID(as_uuid=True),
         primary_key=True,
+        default=uuid.uuid4,
     )
     __withdraw_fee = sqlalchemy.Column(
         "WithdrawFee",
