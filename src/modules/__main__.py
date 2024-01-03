@@ -15,7 +15,6 @@ engine = sqlalchemy.create_engine(url=POSTGRES_URI)
 #TODO: Solve the issues related to MySQL Syntax
 # engine = sqlalchemy.create_engine(url=MYSQL_URI)
 
-
 Base.metadata.create_all(bind=engine)
 
 Session = sqlalchemy.orm.sessionmaker(bind=engine)
@@ -33,10 +32,6 @@ session.add_all(
     ]
 )
 session.commit()
-
-# Getting Banks uuid from the database
-itauBank = session.get(entity=Bank, ident=itauBank.getId())
-santanderBank = session.get(entity=Bank, ident=santanderBank.getId())
 
 # Creating Account Rules
 checkingItauRule = AccountRule(
@@ -69,24 +64,6 @@ session.add_all(
     ]
 )
 session.commit()
-
-# Getting AccountRule uuid from the database
-checkingItauRule = session.get(
-    entity=AccountRule,
-    ident=checkingItauRule.getId(),
-)
-savingItauRule = session.get(
-    entity=AccountRule,
-    ident=savingItauRule.getId(),
-)
-checkingSantanderRule = session.get(
-    entity=AccountRule,
-    ident=checkingSantanderRule.getId(),
-)
-savingSantanderRule = session.get(
-    entity=AccountRule,
-    ident=checkingSantanderRule.getId(),
-)
 
 # Creating Account Types
 checkingItau = AccountType(
@@ -124,24 +101,3 @@ session.add_all(
     ]
 )
 session.commit()
-
-# Getting AccountType uuid from the database
-checkingItau = session.get(
-    entity=AccountType,
-    ident=checkingItau.getId(),
-)
-
-savingItau = session.get(
-    entity=AccountType,
-    ident=savingItau.getId(),
-)
-
-checkingSantander = session.get(
-    entity=AccountType,
-    ident=checkingSantander.getId(),
-)
-
-savingSantander = session.get(
-    entity=AccountType,
-    ident=savingSantander.getId(),
-)

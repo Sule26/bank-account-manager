@@ -1,7 +1,6 @@
 from .base import Base
-import sqlalchemy
-import sqlalchemy.orm
-import enum
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column
 import uuid
 
 
@@ -13,29 +12,27 @@ import uuid
 class AccountType(Base):
     __tablename__ = "AccountType"
 
-    __id = sqlalchemy.Column(
-        "Id",
-        sqlalchemy.UUID(as_uuid=True),
+    __id: Mapped[uuid.UUID] = mapped_column(
+        name="id",
         primary_key=True,
         default=uuid.uuid4,
     )
-    __bank_id = sqlalchemy.Column(
-        "BankId",
-        sqlalchemy.Uuid,
-        sqlalchemy.ForeignKey("Bank.Id", ondelete="CASCADE"),
+
+    __bank_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey(column="Bank.id", ondelete="CASCADE"),
+        name="bank_id",
         nullable=False,
     )
 
-    __account_rule_id = sqlalchemy.Column(
-        "AccountRuleId",
-        sqlalchemy.Uuid,
-        sqlalchemy.ForeignKey("AccountRule.Id", ondelete="CASCADE"),
+    __account_rule_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey(column="AccountRule.id", ondelete="CASCADE"),
+        name="account_rule_id",
         nullable=False,
     )
 
-    __name = sqlalchemy.Column(
-        "Name",
-        sqlalchemy.String(25),
+    __name: Mapped[str] = mapped_column(
+        String(64),
+        name="name",
         nullable=False,
     )
 

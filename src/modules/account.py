@@ -1,33 +1,59 @@
 from .base import Base
-import sqlalchemy
-import sqlalchemy.orm
+from datetime import datetime
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 import uuid
 
 
 class Account(Base):
     __tablename__ = "Account"
 
-    __id = sqlalchemy.Column(
-        "Id",
-        sqlalchemy.UUID(as_uuid=True),
+    __id: Mapped[uuid.UUID] = mapped_column(
+        name="id",
         primary_key=True,
         default=uuid.uuid4,
     )
-    __bank_id = sqlalchemy.Column(
-        "BankId",
-        sqlalchemy.Uuid,
-        sqlalchemy.ForeignKey("Bank.Id", ondelete="CASCADE"),
+    __bank_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey(column="Bank.id", ondelete="CASCADE"),
+        name="bank_id",
         nullable=False,
     )
-    __user_id = sqlalchemy.Column(
-        "UserId",
-        sqlalchemy.Uuid,
-        sqlalchemy.ForeignKey("User.Id", ondelete="CASCADE"),
+    __user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey(column="User.id", ondelete="CASCADE"),
+        name="user_id",
         nullable=False,
+    )
+    __balance: Mapped[float] = mapped_column(
+        name="balance",
+        nullable=False,
+    )
+    __creation_date: Mapped[datetime] = mapped_column(
+        name="creation_date",
+        nullable=False,
+        default=datetime.now,
     )
 
-    balance = sqlalchemy.Column("Balance", sqlalchemy.Float, nullable=False)
-    creation_date = sqlalchemy.Column("CreationDate", sqlalchemy.Date, nullable=False)
+    # __id = sqlalchemy.Column(
+    #     "Id",
+    #     sqlalchemy.UUID(as_uuid=True),
+    #     primary_key=True,
+    #     default=uuid.uuid4,
+    # )
+    # __bank_id = sqlalchemy.Column(
+    #     "BankId",
+    #     sqlalchemy.Uuid,
+    #     sqlalchemy.ForeignKey("Bank.Id", ondelete="CASCADE"),
+    #     nullable=False,
+    # )
+    # __user_id = sqlalchemy.Column(
+    #     "UserId",
+    #     sqlalchemy.Uuid,
+    #     sqlalchemy.ForeignKey("User.Id", ondelete="CASCADE"),
+    #     nullable=False,
+    # )
+
+    # balance = sqlalchemy.Column("Balance", sqlalchemy.Float, nullable=False)
+    # creation_date = sqlalchemy.Column("CreationDate", sqlalchemy.Date, nullable=False)
 
     def __init__(
         self,

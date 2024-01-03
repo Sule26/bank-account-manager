@@ -1,26 +1,22 @@
 from .base import Base
-import sqlalchemy
-import sqlalchemy.orm
+from sqlalchemy.orm import Mapped, mapped_column
 import uuid
 
 
 class AccountRule(Base):
     __tablename__ = "AccountRule"
 
-    __id = sqlalchemy.Column(
-        "Id",
-        sqlalchemy.UUID(as_uuid=True),
+    __id: Mapped[uuid.UUID] = mapped_column(
+        name="id",
         primary_key=True,
         default=uuid.uuid4,
     )
-    __withdraw_fee = sqlalchemy.Column(
-        "WithdrawFee",
-        sqlalchemy.Float,
+    __withdraw_fee: Mapped[float] = mapped_column(
+        name="withdraw_fee",
         nullable=False,
     )
-    __minimum_initial_balance = sqlalchemy.Column(
-        "MinimumInitialBalance",
-        sqlalchemy.Float,
+    __minimum_initial_balance: Mapped[float] = mapped_column(
+        name="minimum_initial_balance",
         nullable=False,
     )
 

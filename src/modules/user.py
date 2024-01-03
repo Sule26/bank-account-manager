@@ -1,63 +1,60 @@
 from .base import Base
 from datetime import datetime
-import sqlalchemy
-import sqlalchemy.orm
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 import uuid
 
 
 class User(Base):
     __tablename__ = "User"
 
-    __id = sqlalchemy.Column(
-        "Id",
-        sqlalchemy.UUID(as_uuid=True),
+    __id: Mapped[uuid.UUID] = mapped_column(
+        name="id",
         primary_key=True,
         default=uuid.uuid4,
     )
-    __first_name = sqlalchemy.Column(
-        "FirstName",
-        sqlalchemy.String(25),
+
+    __first_name: Mapped[str] = mapped_column(
+        String(64),
+        name="first_name",
         nullable=False,
     )
-    __last_name = sqlalchemy.Column(
-        "LastName",
-        sqlalchemy.String(25),
+    __last_name: Mapped[str] = mapped_column(
+        String(64),
+        name="last_name",
         nullable=False,
     )
-    __cpf = sqlalchemy.Column(
-        "CPF",
-        sqlalchemy.Integer,
-        nullable=True,
-    )
-    __username = sqlalchemy.Column(
-        "Username",
-        sqlalchemy.String(25),
-        nullable=True,
-    )
-    __password = sqlalchemy.Column(
-        "Password",
-        sqlalchemy.String(25),
-        nullable=True,
-    )
-    __email = sqlalchemy.Column(
-        "Email",
-        sqlalchemy.String(100),
-        nullable=True,
-    )
-    __phone = sqlalchemy.Column(
-        "Phone",
-        sqlalchemy.Integer,
-        nullable=True,
-    )
-    __birth_date = sqlalchemy.Column(
-        "BirthDate",
-        sqlalchemy.Date,
+    __cpf: Mapped[int] = mapped_column(
+        name="cpf",
         nullable=False,
     )
-    __creation_date = sqlalchemy.Column(
-        "CreationDate",
-        sqlalchemy.Date,
+    __username: Mapped[str] = mapped_column(
+        String(64),
+        name="username",
         nullable=False,
+    )
+    __password: Mapped[str] = mapped_column(
+        String(64),
+        name="password",
+        nullable=False,
+    )
+    __email: Mapped[str] = mapped_column(
+        String(120),
+        name="email",
+        nullable=False,
+    )
+    __phone: Mapped[int] = mapped_column(
+        name="phone",
+        nullable=False,
+    )
+    __birth_date: Mapped[datetime] = mapped_column(
+        name="birth_date",
+        nullable=False,
+    )
+    __creation_date: Mapped[datetime] = mapped_column(
+        name="creation_date",
+        nullable=False,
+        default=datetime.now,
     )
 
     def __init__(

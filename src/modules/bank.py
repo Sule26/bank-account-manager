@@ -1,21 +1,21 @@
 from .base import Base
-import sqlalchemy
-import sqlalchemy.orm
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 import uuid
 
 
 class Bank(Base):
     __tablename__ = "Bank"
 
-    __id = sqlalchemy.Column(
-        "Id",
-        sqlalchemy.UUID(as_uuid=True),
+    __id: Mapped[uuid.UUID] = mapped_column(
+        name="id",
         primary_key=True,
         default=uuid.uuid4,
     )
-    __name = sqlalchemy.Column(
-        "Name",
-        sqlalchemy.String(25),
+
+    __name: Mapped[str] = mapped_column(
+        String(64),
+        name="name",
         nullable=False,
     )
 
