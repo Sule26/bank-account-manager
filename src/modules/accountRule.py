@@ -23,13 +23,6 @@ class AccountRule(Base):
         nullable=False,
     )
 
-    def __init__(
-        self,
-        withdraw_fee: float,
-        minimum_initial_balance: float,
-    ) -> None:
-        self.__withdraw_fee = withdraw_fee
-        self.__minimum_initial_balance = minimum_initial_balance
-
-    def getId(self) -> str:
-        return self.__id
+    account_type: Mapped["AccountType"] = relationship(
+        back_populates="account_rules", single_parent=True
+    )

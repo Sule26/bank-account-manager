@@ -34,4 +34,11 @@ class AccountType(Base):
         nullable=False,
     )
 
+    bank: Mapped["Bank"] = relationship(
+        back_populates="account_types",
+    )
+
+    account_rules: Mapped["AccountRule"] = relationship(
+        back_populates="account_type",
+    )
     
