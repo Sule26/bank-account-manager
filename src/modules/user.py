@@ -53,3 +53,6 @@ class User(Base):
     accounts: Mapped[List["Account"]] = relationship(
         back_populates="user",
     )
+
+    def __repr__(self) -> str:
+        return f"<User(first_name={self.first_name} last_name={self.last_name} cpf={self.cpf} username={self.username} password={self.password} email={self.email} phone={self.phone} birth_date={self.birth_date} creation_date={self.creation_date})>"

@@ -28,3 +28,6 @@ class Bank(Base):
     account_types: Mapped[List["AccountType"]] = relationship(
         back_populates="bank",
     )
+
+    def __repr__(self) -> str:
+        return f"<Bank(id={self.id} name={self.name})>"

@@ -36,7 +36,6 @@ class AccountType(Base):
     )
 
     name: Mapped[str] = mapped_column(
-        String(64),
         nullable=False,
     )
 
@@ -47,4 +46,6 @@ class AccountType(Base):
     account_rules: Mapped["AccountRule"] = relationship(
         back_populates="account_type",
     )
-    
+
+    def __repr__(self) -> str:
+        return f"<AccountType(id={self.id} bank_id={self.bank_id} account_rule_id={self.account_rule_id} name={self.name}>"

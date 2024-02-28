@@ -26,3 +26,6 @@ class AccountRule(Base):
     account_type: Mapped["AccountType"] = relationship(
         back_populates="account_rules", single_parent=True
     )
+
+    def __repr__(self) -> str:
+        return f"<AccountRule(id={self.id} withdraw_fee={self.withdraw_fee} minimum_initial_balance={self.minimum_initial_balance})>"
