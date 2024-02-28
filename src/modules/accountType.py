@@ -1,3 +1,4 @@
+import enum
 import uuid
 from typing import TYPE_CHECKING
 
@@ -9,6 +10,11 @@ from .base import Base
 if TYPE_CHECKING:
     from .accountRule import AccountRule
     from .bank import Bank
+
+# Todo: Use Enum instead of str
+# class AccountTypeEnum(enum.Enum):
+#     CHECKING_ACCOUNT = "Checking Account"
+#     SAVING_ACCOUNT = "Saving Account"
 
 
 class AccountType(Base):

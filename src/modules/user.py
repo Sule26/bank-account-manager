@@ -1,8 +1,12 @@
-from .base import Base
-from datetime import datetime
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
 import uuid
+from datetime import date, datetime
+from typing import List
+
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from .account import Account
+from .base import Base
 
 
 class User(Base):
@@ -21,7 +25,7 @@ class User(Base):
         String(64),
         nullable=False,
     )
-    cpf: Mapped[int] = mapped_column(
+    cpf: Mapped[str] = mapped_column(
         nullable=False,
     )
     username: Mapped[str] = mapped_column(
@@ -36,13 +40,14 @@ class User(Base):
         String(120),
         nullable=False,
     )
-    phone: Mapped[int] = mapped_column(
+    phone: Mapped[str] = mapped_column(
         nullable=False,
     )
-    birth_date: Mapped[datetime] = mapped_column(
+    birth_date: Mapped[date] = mapped_column(
         nullable=False,
     )
-    _reation_date: Mapped[datetime] = mapped_column(
+    creation_date: Mapped[datetime] = mapped_column(
         nullable=False,
-        default=datetime.now,
+        default=datetime.now().strftime("%Y-%m-%d %X"),
+    )
     )

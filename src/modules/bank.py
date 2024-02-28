@@ -1,11 +1,16 @@
+import enum
 import uuid
 from typing import List
 
-from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .accountType import AccountType
 from .base import Base
+
+# Todo: Use Enum instead of str
+# class BankEnum(enum.Enum):
+#     ITAU = "Itaú"
+#     SANTANDER = "Santander"
 
 
 class Bank(Base):
@@ -17,7 +22,6 @@ class Bank(Base):
     )
 
     name: Mapped[str] = mapped_column(
-        String(64),
         nullable=False,
     )
 

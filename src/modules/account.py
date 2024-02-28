@@ -1,8 +1,14 @@
-from .base import Base
-from datetime import datetime
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
 import uuid
+from datetime import datetime
+from typing import TYPE_CHECKING
+
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from .base import Base
+
+if TYPE_CHECKING:
+    from .user import User
 
 
 class Account(Base):
@@ -16,6 +22,10 @@ class Account(Base):
         ForeignKey(column="Bank.id", ondelete="CASCADE"),
         nullable=False,
     )
+    account_type_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey(column="AccountType.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     user_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey(column="User.id", ondelete="CASCADE"),
         nullable=False,
@@ -25,5 +35,6 @@ class Account(Base):
     )
     creation_date: Mapped[datetime] = mapped_column(
         nullable=False,
-        default=datetime.now,
+        default=datetime.now().strftime("%Y-%m-%d %X"),
+    )
     )
