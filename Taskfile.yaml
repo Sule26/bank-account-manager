@@ -38,4 +38,4 @@ tasks:
     deps:
       - env:set
     cmd: micromamba -n '{{.MICROMAMBA_ENV}}' run python -m src
-  generate:schemas: micromamba -n '{{.MICROMAMBA_ENV}}' run python -m src.modules
+  generate:schemas: micromamba -n '{{.MICROMAMBA_ENV}}' run python -m src.models
