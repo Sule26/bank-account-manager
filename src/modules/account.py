@@ -37,4 +37,6 @@ class Account(Base):
         nullable=False,
         default=datetime.now().strftime("%Y-%m-%d %X"),
     )
+    user: Mapped["User"] = relationship(
+        back_populates="accounts",
     )

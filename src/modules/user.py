@@ -50,4 +50,6 @@ class User(Base):
         nullable=False,
         default=datetime.now().strftime("%Y-%m-%d %X"),
     )
+    accounts: Mapped[List["Account"]] = relationship(
+        back_populates="user",
     )
