@@ -24,7 +24,7 @@ class AccountRule(Base):
     )
 
     account_type: Mapped["AccountType"] = relationship(
-        back_populates="account_rules", single_parent=True
+        back_populates="account_rules",
     )
 
     def __repr__(self) -> str:

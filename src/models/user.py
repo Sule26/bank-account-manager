@@ -27,6 +27,7 @@ class User(Base):
     )
     cpf: Mapped[str] = mapped_column(
         nullable=False,
+        # unique=True,
     )
     username: Mapped[str] = mapped_column(
         String(64),
@@ -39,9 +40,11 @@ class User(Base):
     email: Mapped[str] = mapped_column(
         String(120),
         nullable=False,
+        # unique=True,
     )
     phone: Mapped[str] = mapped_column(
         nullable=False,
+        # unique=True,
     )
     birth_date: Mapped[date] = mapped_column(
         nullable=False,
