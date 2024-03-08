@@ -7,20 +7,11 @@ from sqlalchemy.orm import sessionmaker
 
 from .account import Account
 from .accountRule import AccountRule
-from .accountType import AccountType
-from .bank import Bank
+from .accountType import ACCOUNT_TYPES, AccountType
+from .bank import BANK_NAMES, Bank
 from .base import Base
 from .uris import MYSQL_URI, POSTGRES_URI
 from .user import User
-
-ACCOUNT_TYPES = {
-    "CHECKING_ACCOUNT": "Checking Account",
-    "SAVING_ACCOUNT": "Saving Account",
-}
-BANK_NAMES = {
-    "ITAU": "Itaú",
-    "SANTANDER": "Santander",
-}
 
 engine = create_engine(url=POSTGRES_URI, echo="debug")
 
@@ -46,14 +37,14 @@ if not check_banks_row:
         name=BANK_NAMES["ITAU"],
         account_types=[
             AccountType(
-                name=ACCOUNT_TYPES["CHECKING_ACCOUNT"],
+                name=ACCOUNT_TYPES["CHECKING"],
                 account_rules=AccountRule(
                     withdraw_fee=1,
                     minimum_initial_balance=50,
                 ),
             ),
             AccountType(
-                name=ACCOUNT_TYPES["SAVING_ACCOUNT"],
+                name=ACCOUNT_TYPES["SAVING"],
                 account_rules=AccountRule(
                     withdraw_fee=3,
                     minimum_initial_balance=200,
@@ -66,14 +57,14 @@ if not check_banks_row:
         name=BANK_NAMES["SANTANDER"],
         account_types=[
             AccountType(
-                name=ACCOUNT_TYPES["CHECKING_ACCOUNT"],
+                name=ACCOUNT_TYPES["CHECKING"],
                 account_rules=AccountRule(
                     withdraw_fee=1.5,
                     minimum_initial_balance=65,
                 ),
             ),
             AccountType(
-                name=ACCOUNT_TYPES["SAVING_ACCOUNT"],
+                name=ACCOUNT_TYPES["SAVING"],
                 account_rules=AccountRule(
                     withdraw_fee=3.75,
                     minimum_initial_balance=175,

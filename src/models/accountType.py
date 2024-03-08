@@ -16,6 +16,11 @@ if TYPE_CHECKING:
 #     CHECKING_ACCOUNT = "Checking Account"
 #     SAVING_ACCOUNT = "Saving Account"
 
+ACCOUNT_TYPES = {
+    "CHECKING": "Checking",
+    "SAVING": "Saving",
+}
+
 
 class AccountType(Base):
     __tablename__ = "AccountType"

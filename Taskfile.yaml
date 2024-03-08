@@ -34,8 +34,11 @@ tasks:
       - task: postgres:down
       - task: postgres:delete:volume
       - task: postgres:up
-  run:
+  app:
     deps:
       - env:set
     cmd: micromamba -n '{{.MICROMAMBA_ENV}}' run python -m src
-  generate:schemas: micromamba -n '{{.MICROMAMBA_ENV}}' run python -m src.models
+  generate:schemas:
+    deps:
+      - env:set
+    cmd: micromamba -n '{{.MICROMAMBA_ENV}}' run python -m src.models

@@ -12,6 +12,11 @@ from .base import Base
 #     ITAU = "Itaú"
 #     SANTANDER = "Santander"
 
+BANK_NAMES = {
+    "ITAU": "Itaú",
+    "SANTANDER": "Santander",
+}
+
 
 class Bank(Base):
     __tablename__ = "Bank"

@@ -1,8 +1,8 @@
+customtkinter
+Faker
 loguru
 pillow
 psycopg2-binary
 sqlalchemy
 sqlalchemy-orm
-tk
 types-Pillow
-Faker
