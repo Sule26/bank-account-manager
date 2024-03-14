@@ -13,7 +13,7 @@ from .base import Base
 from .uris import MYSQL_URI, POSTGRES_URI
 from .user import User
 
-engine = create_engine(url=POSTGRES_URI, echo="debug")
+engine = create_engine(url=POSTGRES_URI)
 
 # TODO: Solve the issues related to MySQL Syntax
 # engine = sqlalchemy.create_engine(url=MYSQL_URI)
@@ -91,7 +91,7 @@ stmt = select(AccountType).join(Bank)
 account_type_rows = session.execute(stmt).scalars().all()
 
 users = []
-for index in range(0, 2):
+for index in range(0, 20):
     random_account_type = (account_type_rows[randint(0, 3)],)[0]
     users.append(
         User(
