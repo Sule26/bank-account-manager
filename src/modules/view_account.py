@@ -26,6 +26,7 @@ session = Session()
 class ViewAccount(ctk.CTkFrame):
     def __init__(self, parent: ctk.CTk) -> None:
         super().__init__(master=parent)
+        self.parent = parent
 
         # Create widgets
         self.title_label = ctk.CTkLabel(
@@ -238,17 +239,16 @@ class ViewAccount(ctk.CTkFrame):
             padx=20,
             pady=5,
         )
-        self.get_account(parent)
+        self.get_account()
 
-    def get_account(self, parent) -> "Account":
-        stmt = select(Account).join(User).where(parent.account.id == Account.id)
-        account = session.execute(stmt).scalars().first()
-
-        self.first_name_result.configure(text=f"{account.user.first_name}")
-        self.last_name_result.configure(text=f"{account.user.last_name}")
-        self.cpf_result.configure(text=f"{account.user.cpf}")
-        self.email_result.configure(text=f"{account.user.email}")
-        self.phone_result.configure(text=f"{account.user.phone}")
-        self.bank_result.configure(text=f"{account.account_type.bank.name}")
-        self.account_type_result.configure(text=f"{account.account_type.name}")
-        self.balance_result.configure(text=f"${account.balance:.2f}")
+    def get_account(self) -> None:
+        self.first_name_result.configure(text=f"{self.parent.account.user.first_name}")
+        self.last_name_result.configure(text=f"{self.parent.account.user.last_name}")
+        self.cpf_result.configure(text=f"{self.parent.account.user.cpf}")
+        self.email_result.configure(text=f"{self.parent.account.user.email}")
+        self.phone_result.configure(text=f"{self.parent.account.user.phone}")
+        self.bank_result.configure(text=f"{self.parent.account.account_type.bank.name}")
+        self.account_type_result.configure(
+            text=f"{self.parent.account.account_type.name}"
+        )
+        self.balance_result.configure(text=f"${self.parent.account.balance:.2f}")

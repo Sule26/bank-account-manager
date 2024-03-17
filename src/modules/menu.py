@@ -88,10 +88,12 @@ class Menu(ctk.CTkFrame):
         self.deposit_button = ctk.CTkButton(
             master=self,
             text="Deposit",
+            command=lambda: self.parent.display_deposit(),
         )
         self.withdraw_button = ctk.CTkButton(
             master=self,
             text="Withdraw",
+            command=lambda: self.parent.display_withdraw(),
         )
         self.transference_button = ctk.CTkButton(
             master=self,

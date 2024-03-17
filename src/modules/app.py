@@ -6,10 +6,12 @@ from sqlalchemy.orm import sessionmaker
 from ..models.account import Account
 from ..models.uris import MYSQL_URI, POSTGRES_URI
 from .check_account import CheckAccount
+from .deposit import Deposit
 from .login import Login
 from .menu import Menu
 from .sign_up import SignUp
 from .view_account import ViewAccount
+from .withdraw import Withdraw
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -94,3 +96,29 @@ class App(ctk.CTk):
             row=0,
             column=1,
         )
+
+    def display_deposit(self) -> None:
+        try:
+            self.displayed_frame.destroy()
+        except:
+            pass
+        self.displayed_frame = Deposit(self)
+        self.displayed_frame.grid(
+            row=0,
+            column=1,
+        )
+
+    def display_withdraw(self) -> None:
+        try:
+            self.displayed_frame.destroy()
+        except:
+            pass
+        self.displayed_frame = Withdraw(self)
+        self.displayed_frame.grid(
+            row=0,
+            column=1,
+        )
+
+    def update_object_account(self):
+        stmt = select(Account).where(Account.id == self.account.id)
+        self.account = session.execute(stmt).scalars().first()

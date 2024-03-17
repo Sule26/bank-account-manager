@@ -166,7 +166,10 @@ class Login(ctk.CTkFrame):
             parent.display_view_account()
 
     def check_entry(
-        self, entry: ctk.CTkEntry, entry_name: str, warning_label: ctk.CTkLabel
+        self,
+        entry: ctk.CTkEntry,
+        entry_name: str,
+        warning_label: ctk.CTkLabel,
     ) -> bool:
         warning_row = {
             "username": 2,

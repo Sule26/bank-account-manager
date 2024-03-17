@@ -2,7 +2,7 @@ import re
 
 import customtkinter as ctk
 from CTkTable import *
-from sqlalchemy import create_engine, or_, select
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 from ..models.accountRule import AccountRule
