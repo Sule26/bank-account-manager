@@ -1,4 +1,5 @@
 import ctypes
+import re
 
 import customtkinter as ctk
 from CTkTable import *
@@ -32,6 +33,7 @@ class App(ctk.CTk):
     def __init__(self, title: str, screen_size: tuple) -> None:
         super().__init__()
         self.title(title)
+        self.account: "Account"
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
         x = (screen_width - screen_size[0]) / 2
@@ -93,11 +95,8 @@ class App(ctk.CTk):
             self.login_frame.destroy()
         if hasattr(self, "sign_up_frame"):
             self.sign_up_frame.destroy()
-        if hasattr(self, "menu_frame"):
-            self.menu_frame.destroy()
-        self.logged_menu_frame = LoggedMenuFrame(self)
-        self.logged_menu_frame.grid_rowconfigure(4, weight=1)
-        self.logged_menu_frame.grid(
+        self.menu_frame.display_logged_menu_()
+
             row=0,
             column=0,
             sticky="nsw",
@@ -107,16 +106,20 @@ class App(ctk.CTk):
 class MenuFrame(ctk.CTkFrame):
     def __init__(self, parent: ctk.CTk) -> None:
         super().__init__(master=parent)
+        self.parent = parent
+        self.display_main_menu()
 
+    def display_main_menu(self) -> None:
+        # Create widgets
         self.login_button = ctk.CTkButton(
             master=self,
             text="Login",
-            command=lambda: parent.display_login(),
+            command=lambda: self.parent.display_login(),
         )
         self.watch_account_button = ctk.CTkButton(
             master=self,
             text="Check Account",
-            command=lambda: parent.display_account_table(),
+            command=lambda: self.parent.display_account_table(),
         )
         self.faq_button = ctk.CTkButton(
             master=self,
@@ -131,7 +134,11 @@ class MenuFrame(ctk.CTkFrame):
             values=["Light", "Dark", "System"],
             command=self.change_appearance_mode,
         )
+
+        # Set default
         self.apperance_mode_openmenu.set("Dark")
+
+        # Set layout
         self.login_button.grid(
             row=0,
             column=0,
@@ -162,17 +169,14 @@ class MenuFrame(ctk.CTkFrame):
             pady=(10, 30),
         )
 
-    def change_appearance_mode(self, new_appearance_mode: str) -> None:
-        ctk.set_appearance_mode(new_appearance_mode)
+    def display_logged_menu_(self) -> None:
+        self.grid_forget_main_menu()
 
-
-class LoggedMenuFrame(ctk.CTkFrame):
-    def __init__(self, parent: ctk.CTk) -> None:
-        super().__init__(master=parent)
-
+        # Create widgets
         self.view_account_button = ctk.CTkButton(
             master=self,
             text="View Account",
+            command=lambda: self.parent.display_view_account(),
         )
         self.deposit_button = ctk.CTkButton(
             master=self,
@@ -195,7 +199,8 @@ class LoggedMenuFrame(ctk.CTkFrame):
             values=["Light", "Dark", "System"],
             command=self.change_appearance_mode,
         )
-        self.apperance_mode_openmenu.set("Dark")
+
+        # Set layout
         self.view_account_button.grid(
             row=0,
             column=0,
@@ -220,17 +225,17 @@ class LoggedMenuFrame(ctk.CTkFrame):
             padx=10,
             pady=10,
         )
-        self.apperance_mode_label.grid(
-            row=5,
-            column=0,
-            padx=10,
-        )
-        self.apperance_mode_openmenu.grid(
-            row=6,
-            column=0,
-            padx=10,
-            pady=(10, 30),
-        )
+
+    def grid_forget_logged_menu(self) -> None:
+        self.view_account_button.grid_forget()
+        self.deposit_button.grid_forget()
+        self.withdraw_button.grid_forget()
+        self.transference_button.grid_forget()
+
+    def grid_forget_main_menu(self) -> None:
+        self.login_button.grid_forget()
+        self.watch_account_button.grid_forget()
+        self.faq_button.grid_forget()
 
     def change_appearance_mode(self, new_appearance_mode: str) -> None:
         ctk.set_appearance_mode(new_appearance_mode)
@@ -240,12 +245,12 @@ class LoginFrame(ctk.CTkFrame):
     def __init__(self, parent: ctk.CTk) -> None:
         super().__init__(master=parent)
 
+        # Create widgets
         self.title_label = ctk.CTkLabel(
             master=self,
             text="Login",
             font=(FONT_NAME, FONT_SIZE_TITLE),
         )
-
         self.username_label = ctk.CTkLabel(
             master=self,
             text="Username:",
@@ -293,6 +298,7 @@ class LoginFrame(ctk.CTkFrame):
             command=lambda: parent.display_sign_up(),
         )
 
+        # Set layout
         self.title_label.grid(
             row=0,
             column=0,
@@ -303,25 +309,25 @@ class LoginFrame(ctk.CTkFrame):
             row=1,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.username_entry.grid(
             row=1,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.password_label.grid(
             row=3,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.password_entry.grid(
             row=3,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.sign_in_button.grid(
             row=5,
@@ -339,60 +345,63 @@ class LoginFrame(ctk.CTkFrame):
         )
 
     def login(self, parent: ctk.CTk, username: str, password: str) -> None:
-        if any([self.check_username(username), self.check_password(password)]):
+        if any(
+            [
+                self.check_entry(
+                    self.username_entry,
+                    "username",
+                    self.username_warning,
+                ),
+                self.check_entry(
+                    self.password_entry,
+                    "password",
+                    self.password_warning,
+                ),
+            ]
+        ):
             self.login_warning.grid(
                 row=4,
                 column=0,
                 columnspan=2,
             )
-            stmt = select(User.username, User.password).where(
-                User.username == username, User.password == password
+            stmt = (
+                select(Account)
+                .join(User)
+                .where(User.username == username, User.password == password)
             )
-            user_row = session.execute(stmt).scalars().first()
-            if not user_row:
+            parent.account = session.execute(stmt).scalars().first()
+
+            if not parent.account:
                 self.login_warning.configure(
                     text="* Username or Password does not exist"
                 )
                 return
+
             self.login_warning.grid_forget()
             parent.display_logged_menu_frame()
 
-    def check_username(self, username: str) -> bool:
-        self.username_warning.grid(
-            row=2,
+    def check_entry(
+        self, entry: ctk.CTkEntry, entry_name: str, warning_label: ctk.CTkLabel
+    ) -> bool:
+        warning_row = {"username": 2, "password": 4}
+        warning_label.grid(
+            row=warning_row[entry_name],
             column=1,
         )
-        if username == "":
-            self.username_warning.configure(text="* Username entry can't be blank")
-            return False
-        if " " in username:
-            self.username_warning.configure(text="* Username entry can't have spaces")
-            return False
-        if len(username) < 6:
-            self.username_warning.configure(
-                text="* Username must have at least 6 characters"
-            )
-            return False
-        self.username_warning.grid_forget()
-        return True
 
-    def check_password(self, password: str) -> bool:
-        self.password_warning.grid(
-            row=4,
-            column=1,
-        )
-        if password == "":
-            self.password_warning.configure(text="* Username entry can't be blank")
+        if entry.get() == "":
+            warning_label.configure(text="* Entry can't be blank")
             return False
-        if " " in password:
-            self.password_warning.configure(text="* Username entry can't have spaces")
+
+        if " " in entry.get():
+            warning_label.configure(text="* Entry can't have spaces")
             return False
-        if len(password) < 6:
-            self.password_warning.configure(
-                text="* Username must have at least 6 characters"
-            )
+
+        if len(entry.get()) < 6:
+            warning_label.configure(text="* Entry must have at least 6 characters")
             return False
-        self.password_warning.grid_forget()
+
+        warning_label.grid_forget()
         return True
 
 
@@ -400,6 +409,12 @@ class SignUpFrame(ctk.CTkFrame):
     def __init__(self, parent) -> None:
         super().__init__(master=parent)
 
+        # Create widgets
+        self.title_label = ctk.CTkLabel(
+            master=self,
+            text="Sign Up",
+            font=(FONT_NAME, FONT_SIZE_TITLE),
+        )
         self.user_credential_frame = ctk.CTkFrame(
             master=self,
             border_width=1,
@@ -408,10 +423,18 @@ class SignUpFrame(ctk.CTkFrame):
             master=self,
             border_width=1,
         )
-        self.title_label = ctk.CTkLabel(
+        self.sign_up_button = ctk.CTkButton(
             master=self,
             text="Sign Up",
-            font=(FONT_NAME, FONT_SIZE_TITLE),
+            command=lambda: self.sign_up(),
+        )
+
+        # Set layout
+        self.title_label.grid(
+            row=0,
+            column=0,
+            columnspan=2,
+            pady=10,
         )
         self.user_credential_frame.grid(
             row=1,
@@ -424,16 +447,6 @@ class SignUpFrame(ctk.CTkFrame):
             column=1,
             sticky="ns",
             padx=(5, 10),
-            pady=10,
-        )
-        self.sign_up_button = ctk.CTkButton(
-            master=self,
-            text="Sign In",
-        )
-        self.title_label.grid(
-            row=0,
-            column=0,
-            columnspan=2,
             pady=10,
         )
         self.sign_up_button.grid(
@@ -453,6 +466,11 @@ class SignUpFrame(ctk.CTkFrame):
             master=self.user_credential_frame,
             font=(FONT_NAME, FONT_SIZE_TEXT),
         )
+        self.first_name_warning = ctk.CTkLabel(
+            master=self.user_credential_frame,
+            font=(FONT_NAME, FONT_SIZE_WARNING),
+            text_color=WARNING_TEXT_COLOR,
+        )
         self.last_name_label = ctk.CTkLabel(
             master=self.user_credential_frame,
             text="Last Name:",
@@ -461,6 +479,11 @@ class SignUpFrame(ctk.CTkFrame):
         self.last_name_entry = ctk.CTkEntry(
             master=self.user_credential_frame,
             font=(FONT_NAME, FONT_SIZE_TEXT),
+        )
+        self.last_name_warning = ctk.CTkLabel(
+            master=self.user_credential_frame,
+            font=(FONT_NAME, FONT_SIZE_WARNING),
+            text_color=WARNING_TEXT_COLOR,
         )
         self.cpf_label = ctk.CTkLabel(
             master=self.user_credential_frame,
@@ -471,6 +494,11 @@ class SignUpFrame(ctk.CTkFrame):
             master=self.user_credential_frame,
             font=(FONT_NAME, FONT_SIZE_TEXT),
         )
+        self.cpf_warning = ctk.CTkLabel(
+            master=self.user_credential_frame,
+            font=(FONT_NAME, FONT_SIZE_WARNING),
+            text_color=WARNING_TEXT_COLOR,
+        )
         self.email_label = ctk.CTkLabel(
             master=self.user_credential_frame,
             text="Email:",
@@ -479,6 +507,11 @@ class SignUpFrame(ctk.CTkFrame):
         self.email_entry = ctk.CTkEntry(
             master=self.user_credential_frame,
             font=(FONT_NAME, FONT_SIZE_TEXT),
+        )
+        self.email_warning = ctk.CTkLabel(
+            master=self.user_credential_frame,
+            font=(FONT_NAME, FONT_SIZE_WARNING),
+            text_color=WARNING_TEXT_COLOR,
         )
         self.phone_label = ctk.CTkLabel(
             master=self.user_credential_frame,
@@ -489,68 +522,72 @@ class SignUpFrame(ctk.CTkFrame):
             master=self.user_credential_frame,
             font=(FONT_NAME, FONT_SIZE_TEXT),
         )
+        self.phone_warning = ctk.CTkLabel(
+            master=self.user_credential_frame,
+            font=(FONT_NAME, FONT_SIZE_WARNING),
+            text_color=WARNING_TEXT_COLOR,
+        )
 
         # Set layout from user_account_frame
-
         self.first_name_label.grid(
             row=1,
             column=0,
             padx=20,
-            pady=10,
+            pady=(10, 0),
         )
         self.first_name_entry.grid(
             row=1,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.last_name_label.grid(
-            row=2,
+            row=3,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.last_name_entry.grid(
-            row=2,
+            row=3,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.cpf_label.grid(
-            row=3,
+            row=5,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.cpf_entry.grid(
-            row=3,
+            row=5,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.email_label.grid(
-            row=4,
+            row=7,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.email_entry.grid(
-            row=4,
+            row=7,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.phone_label.grid(
-            row=5,
+            row=9,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.phone_entry.grid(
-            row=5,
+            row=9,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
 
         # Create widgets from account_credential_frame
@@ -581,45 +618,168 @@ class SignUpFrame(ctk.CTkFrame):
             master=self.account_credential_frame,
             font=(FONT_NAME, FONT_SIZE_TEXT),
         )
+        self.balance_warning = ctk.CTkLabel(
+            master=self.account_credential_frame,
+            font=(FONT_NAME, FONT_SIZE_WARNING),
+            text_color=WARNING_TEXT_COLOR,
+        )
 
         # Set layout from account_credential_frame
         self.bank_label.grid(
             row=0,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.bank_optionmenu.grid(
             row=0,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.account_type_label.grid(
             row=1,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.account_type_optionmenu.grid(
             row=1,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
             sticky="we",
         )
         self.balance_label.grid(
             row=2,
             column=0,
             padx=20,
-            pady=10,
+            pady=5,
         )
         self.balance_entry.grid(
             row=2,
             column=1,
             padx=20,
-            pady=10,
+            pady=5,
         )
+
+    def sign_up(self) -> None:
+        if any(
+            [
+                self.check_entry(
+                    entry=self.first_name_entry,
+                    entry_name="first_name",
+                    warning_label=self.first_name_warning,
+                ),
+                self.check_entry(
+                    entry=self.last_name_entry,
+                    entry_name="last_name",
+                    warning_label=self.last_name_warning,
+                ),
+                self.check_entry(
+                    entry=self.cpf_entry,
+                    entry_name="cpf",
+                    warning_label=self.cpf_warning,
+                ),
+                self.check_entry(
+                    entry=self.email_entry,
+                    entry_name="email",
+                    warning_label=self.email_warning,
+                ),
+                self.check_entry(
+                    entry=self.phone_entry,
+                    entry_name="phone",
+                    warning_label=self.phone_warning,
+                ),
+                self.check_entry(
+                    entry=self.balance_entry,
+                    entry_name="balance",
+                    warning_label=self.balance_warning,
+                ),
+            ]
+        ):
+            pass
+
+    def check_entry(
+        self, entry: ctk.CTkEntry, entry_name: str, warning_label: ctk.CTkLabel
+    ) -> bool:
+        warning_row = {
+            "first_name": 2,
+            "balance": 3,
+            "last_name": 4,
+            "cpf": 6,
+            "email": 8,
+            "phone": 10,
+        }
+        warning_label.grid(
+            row=warning_row[entry_name],
+            column=1,
+        )
+        if entry.get() == "":
+            warning_label.configure(text="* Entry can't be blank")
+            return False
+
+        if " " in entry.get():
+            warning_label.configuer(text="* Entry can't have spaces")
+            return False
+
+        if entry_name in ["first_name", "last_name"]:
+            if not entry.get().isalpha():
+                warning_label.configure(text="* Entry can't have numbers")
+                return False
+
+        if entry_name == "cpf":
+            if not entry.get().isnumeric():
+                warning_label.configure(text="* Entry just accept digits")
+                return False
+            if len(entry.get()) != 11:
+                warning_label.configure(text="* Entry must have exactly 11 digits")
+                return False
+            # if not validate_cpf(entry.get()):
+            #     warning_label.configure(text="* CPF is not valid")
+            #     return False
+
+        if entry_name == "email":
+            if not re.search(
+                "/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/", entry.get()
+            ):
+                warning_label.configure(text="* Not a valid email")
+                return False
+
+        if entry_name == "phone":
+            if not entry.get().isnumeric():
+                warning_label.configure(text="* Entry must have only digits")
+                return False
+
+            if len(entry.get()) != 9:
+                warning_label.configure(text="* Entry must have exactly 9 digits")
+                return False
+
+        if entry_name == "balance":
+            if not entry.get().isnumeric():
+                warning_label.configure(text="* Entry must have only digits")
+                return False
+
+            stmt = (
+                select(AccountRule.minimum_initial_balance)
+                .join(AccountType)
+                .join(Bank)
+                .where(
+                    AccountType.name == self.account_type_optionmenu.get(),
+                    Bank.name == self.bank_optionmenu.get(),
+                )
+            )
+            minimum_initial_balance = session.execute(stmt).scalars().first()
+
+            if int(entry.get()) < minimum_initial_balance:
+
+                warning_label.configure(
+                    text=f"* Minimum balance is ${minimum_initial_balance:.2f}"
+                )
+                return False
+
+        warning_label.grid_forget()
+        return True
 
 
 class CheckAccountFrame(ctk.CTkFrame):
@@ -627,6 +787,7 @@ class CheckAccountFrame(ctk.CTkFrame):
         super().__init__(master=parent)
         self.values = [["Number", "Balance"]]
 
+        # Create widgets
         self.title_label = ctk.CTkLabel(
             master=self,
             text="Check Account",
@@ -655,6 +816,8 @@ class CheckAccountFrame(ctk.CTkFrame):
             text="Check Account",
             command=lambda: self.update_table(self.number_account_entry.get()),
         )
+
+        # Set layout
         self.title_label.grid(
             row=0,
             column=0,
