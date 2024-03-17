@@ -91,6 +91,7 @@ class Account(Base):
 
     def deposit(self, value: float) -> None:
         self.set_balance(value)
+        self.update_database(self)
         logger.success("Deposit succeeded")
 
     def withdrawal(self, value: float) -> None:
