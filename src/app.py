@@ -389,7 +389,10 @@ class LoginFrame(ctk.CTkFrame):
     def check_entry(
         self, entry: ctk.CTkEntry, entry_name: str, warning_label: ctk.CTkLabel
     ) -> bool:
-        warning_row = {"username": 2, "password": 4}
+        warning_row = {
+            "username": 2,
+            "password": 4,
+        }
         warning_label.grid(
             row=warning_row[entry_name],
             column=1,
@@ -1024,7 +1027,7 @@ class ViewAccount(ctk.CTkFrame):
             padx=20,
             pady=5,
         )
-        
+
         # Create widgets from account_info_frame
         self.bank_label = ctk.CTkLabel(
             master=self.account_info_frame,
