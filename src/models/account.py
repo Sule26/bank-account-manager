@@ -53,6 +53,9 @@ class Account(Base):
     user: Mapped["User"] = relationship(
         back_populates="accounts",
     )
+    account_type: Mapped["AccountType"] = relationship(
+        back_populates="account",
+    )
 
     def __repr__(self) -> str:
         return f"<Account(id={self.id} bank_id={self.bank_id} account_type_id={self.account_type_id} user_id={self.user_id} balance={self.balance} creation_date={self.creation_date})>"

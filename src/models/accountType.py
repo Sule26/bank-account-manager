@@ -8,6 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
 
 if TYPE_CHECKING:
+    from .account import Account
     from .accountRule import AccountRule
     from .bank import Bank
 
@@ -49,6 +50,10 @@ class AccountType(Base):
     )
 
     account_rules: Mapped["AccountRule"] = relationship(
+        back_populates="account_type",
+    )
+
+    account: Mapped["Account"] = relationship(
         back_populates="account_type",
     )
 
