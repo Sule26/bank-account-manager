@@ -44,72 +44,53 @@ class App(ctk.CTk):
             column=0,
             sticky="nsw",
         )
-
         self.display_login()
 
         self.mainloop()
 
     def display_login(self) -> None:
-        if hasattr(self, "sign_up_frame"):
-            self.sign_up_frame.destroy()
-        if hasattr(self, "check_account_frame"):
-            self.check_account_frame.destroy()
-        if hasattr(self, "view_account_frame"):
-            self.view_account_frame.destroy()
-        self.login_frame = Login(self)
-        self.login_frame.grid(
+        try:
+            self.displayed_frame.destroy()
+        except:
+            pass
+        self.displayed_frame = Login(self)
+        self.displayed_frame.grid(
             row=0,
             column=1,
         )
 
     def display_sign_up(self) -> None:
-        if hasattr(self, "login_frame"):
-            self.login_frame.destroy()
-        if hasattr(self, "check_account_frame"):
-            self.check_account_frame.destroy()
-        if hasattr(self, "view_account_frame"):
-            self.view_account_frame.destroy()
-        self.sign_up_frame = SignUp(self)
-        self.sign_up_frame.grid(
+        try:
+            self.displayed_frame.destroy()
+        except:
+            pass
+        self.displayed_frame = SignUp(self)
+        self.displayed_frame.grid(
             row=0,
             column=1,
         )
 
     def display_check_account(self) -> None:
-        if hasattr(self, "login_frame"):
-            self.login_frame.destroy()
-        if hasattr(self, "sign_up_frame"):
-            self.sign_up_frame.destroy()
-        if hasattr(self, "check_account_frame"):
-            self.check_account_frame.destroy()
-        if hasattr(self, "view_account_frame"):
-            self.view_account_frame.destroy()
-        self.check_account_frame = CheckAccount(self)
-        self.check_account_frame.grid(
+        try:
+            self.displayed_frame.destroy()
+        except:
+            pass
+        self.displayed_frame = CheckAccount(self)
+        self.displayed_frame.grid(
             row=0,
             column=1,
         )
 
     def display_logged_menu_frame(self) -> None:
-        if hasattr(self, "login_frame"):
-            self.login_frame.destroy()
-        if hasattr(self, "sign_up_frame"):
-            self.sign_up_frame.destroy()
-        if hasattr(self, "check_account_frame"):
-            self.check_account_frame.destroy()
-        if hasattr(self, "view_account"):
-            self.view_account_frame.destroy()
         self.menu_frame.display_logged_menu_()
 
     def display_view_account(self) -> None:
-        if hasattr(self, "login_frame"):
-            self.login_frame.destroy()
-        if hasattr(self, "sign_up_frame"):
-            self.sign_up_frame.destroy()
-        if hasattr(self, "check_account_frame"):
-            self.check_account_frame.destroy()
-        self.view_account_frame = ViewAccount(self)
-        self.view_account_frame.grid(
+        try:
+            self.displayed_frame.destroy()
+        except:
+            pass
+        self.displayed_frame = ViewAccount(self)
+        self.displayed_frame.grid(
             row=0,
             column=1,
         )
