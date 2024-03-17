@@ -285,7 +285,7 @@ class SignUp(ctk.CTkFrame):
         )
 
     def sign_up(self) -> None:
-        if any(
+        if all(
             [
                 self.check_entry(
                     entry=self.first_name_entry,

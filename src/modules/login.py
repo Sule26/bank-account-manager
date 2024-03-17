@@ -129,7 +129,7 @@ class Login(ctk.CTkFrame):
         )
 
     def login(self, parent: ctk.CTk, username: str, password: str) -> None:
-        if any(
+        if all(
             [
                 self.check_entry(
                     self.username_entry,
