@@ -16,6 +16,8 @@ if TYPE_CHECKING:
     from .user import User
 
 engine = create_engine(url=POSTGRES_URI)
+# TODO: Solve the issues related to MySQL Syntax
+# engine = create_engine(url=MYSQL_URI)
 Session = sessionmaker(bind=engine)
 session = Session()
 

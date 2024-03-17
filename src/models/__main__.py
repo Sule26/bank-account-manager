@@ -16,7 +16,7 @@ from .user import User
 engine = create_engine(url=POSTGRES_URI)
 
 # TODO: Solve the issues related to MySQL Syntax
-# engine = sqlalchemy.create_engine(url=MYSQL_URI)
+# engine = create_engine(url=MYSQL_URI)
 
 Base.metadata.create_all(bind=engine)
 
