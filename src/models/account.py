@@ -96,13 +96,18 @@ class Account(Base):
 
     def withdrawal(self, value: float) -> None:
         withdraw_fee = self.get_withdraw_fee()
-        if self.get_balance() < (value + withdraw_fee):
+        if not self.is_withdrawal_possible(value=value, withdraw_fee=withdraw_fee):
             logger.warning("You don't have enough money to withdraw!")
             return
 
         self.set_balance(-(value + withdraw_fee))
         self.update_database(self)
         logger.success("Withdrawal succeeded!")
+
+    def is_withdrawal_possible(self, value: float, withdraw_fee: float) -> bool:
+        if self.get_balance() < (value + withdraw_fee):
+            return False
+        return True
 
     def transference(self, value: float, receiver_account: "Account") -> None:
         if self.get_balance() < value:
