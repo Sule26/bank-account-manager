@@ -98,6 +98,8 @@ class Menu(ctk.CTkFrame):
         self.transference_button = ctk.CTkButton(
             master=self,
             text="Transference",
+            command=lambda: self.parent.display_transferance(),
+        )
         )
         self.apperance_mode_label = ctk.CTkLabel(
             master=self,

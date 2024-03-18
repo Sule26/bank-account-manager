@@ -10,6 +10,7 @@ from .deposit import Deposit
 from .login import Login
 from .menu import Menu
 from .sign_up import SignUp
+from .transference import Transference
 from .view_account import ViewAccount
 from .withdraw import Withdraw
 
@@ -40,7 +41,7 @@ class App(ctk.CTk):
         self.grid_columnconfigure(1, weight=5)
 
         self.menu_frame = Menu(self)
-        self.menu_frame.grid_rowconfigure(4, weight=1)
+        self.menu_frame.grid_rowconfigure(5, weight=1)
         self.menu_frame.grid(
             row=0,
             column=0,
@@ -114,6 +115,17 @@ class App(ctk.CTk):
         except:
             pass
         self.displayed_frame = Withdraw(self)
+        self.displayed_frame.grid(
+            row=0,
+            column=1,
+        )
+
+    def display_transferance(self) -> None:
+        try:
+            self.displayed_frame.destroy()
+        except:
+            pass
+        self.displayed_frame = Transference(self)
         self.displayed_frame.grid(
             row=0,
             column=1,
