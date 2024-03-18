@@ -23,14 +23,14 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-class Login(ctk.CTkFrame):
+class SignIn(ctk.CTkFrame):
     def __init__(self, parent: ctk.CTk) -> None:
         super().__init__(master=parent)
 
         # Create widgets
         self.title_label = ctk.CTkLabel(
             master=self,
-            text="Login",
+            text="Sign In",
             font=(FONT_NAME, FONT_SIZE_TITLE),
         )
         self.username_label = ctk.CTkLabel(
@@ -62,7 +62,7 @@ class Login(ctk.CTkFrame):
             font=(FONT_NAME, FONT_SIZE_WARNING),
             text_color=WARNING_TEXT_COLOR,
         )
-        self.login_warning = ctk.CTkLabel(
+        self.sign_in_warning = ctk.CTkLabel(
             master=self,
             font=(FONT_NAME, FONT_SIZE_WARNING),
             text_color=WARNING_TEXT_COLOR,
@@ -70,16 +70,15 @@ class Login(ctk.CTkFrame):
         self.sign_in_button = ctk.CTkButton(
             master=self,
             text="Sign In",
-            command=lambda: self.login(
-                parent,
-                self.username_entry.get(),
-                self.password_entry.get(),
-            ),
-        )
-        self.sign_up_button = ctk.CTkButton(
-            master=self,
-            text="Sign Up",
-            command=lambda: parent.display_sign_up(),
+            command=lambda: [
+                self.sign_in(
+                    parent,
+                    self.username_entry.get(),
+                    self.password_entry.get(),
+                ),
+                parent.display_menu(menu_type="logged_in"),
+                parent.display_frame(menu_type="view_account"),
+            ],
         )
 
         # Set layout
@@ -116,19 +115,13 @@ class Login(ctk.CTkFrame):
         self.sign_in_button.grid(
             row=5,
             column=0,
-            padx=20,
-            pady=20,
-            sticky="we",
-        )
-        self.sign_up_button.grid(
-            row=5,
-            column=1,
+            columnspan=2,
             padx=20,
             pady=20,
             sticky="we",
         )
 
-    def login(self, parent: ctk.CTk, username: str, password: str) -> None:
+    def sign_in(self, parent: ctk.CTk, username: str, password: str) -> None:
         if all(
             [
                 self.check_entry(
@@ -143,7 +136,7 @@ class Login(ctk.CTkFrame):
                 ),
             ]
         ):
-            self.login_warning.grid(
+            self.sign_in_warning.grid(
                 row=4,
                 column=0,
                 columnspan=2,
@@ -156,14 +149,12 @@ class Login(ctk.CTkFrame):
             parent.account = session.execute(stmt).scalars().first()
 
             if not parent.account:
-                self.login_warning.configure(
+                self.sign_in_warning.configure(
                     text="* Username or Password does not exist"
                 )
                 return
 
-            self.login_warning.grid_forget()
-            parent.display_menu(menu_type="logged_in")
-            parent.display_view_account()
+            self.sign_in_warning.grid_forget()
 
     def check_entry(
         self,

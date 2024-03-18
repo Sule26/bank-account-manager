@@ -1,3 +1,5 @@
+from typing import Union
+
 import customtkinter as ctk
 from CTkTable import *
 from sqlalchemy import create_engine, select
@@ -8,7 +10,7 @@ from ..models.uris import MYSQL_URI, POSTGRES_URI
 from .check_account import CheckAccount
 from .deposit import Deposit
 from .logged_in_menu import LoggedInMenu
-from .login import Login
+from .sign_in import SignIn
 from .main_menu import MainMenu
 from .sign_up import SignUp
 from .transference import Transference
@@ -42,18 +44,27 @@ class App(ctk.CTk):
         self.grid_columnconfigure(1, weight=5)
 
         self.display_menu(menu_type="main")
-        self.display_login()
+        self.display_frame(menu_type="sign_in")
 
         self.mainloop()
 
-    def create_menu(self, menu_type: str):
+    def create_menu(
+        self,
+        menu_type: str,
+    ) -> Union[
+        "MainMenu",
+        "LoggedInMenu",
+    ]:
         if menu_type == "main":
             return MainMenu(self)
 
         if menu_type == "logged_in":
             return LoggedInMenu(self)
 
-    def display_menu(self, menu_type) -> None:
+    def display_menu(
+        self,
+        menu_type,
+    ) -> None:
         try:
             self.displayed_menu.destroy()
         except:
@@ -65,81 +76,48 @@ class App(ctk.CTk):
             sticky="nsw",
         )
 
-    def display_login(self) -> None:
+    def create_frame(
+        self,
+        frame_type: str,
+    ) -> Union[
+        "SignIn",
+        "SignUp",
+        "CheckAccount",
+        "ViewAccount",
+        "Deposit",
+        "Withdraw",
+        "Transference",
+    ]:
+        if frame_type == "sign_in":
+            return SignIn(self)
+
+        if frame_type == "sign_up":
+            return SignUp(self)
+
+        if frame_type == "check_account":
+            return CheckAccount(self)
+
+        if frame_type == "view_account":
+            return ViewAccount(self)
+
+        if frame_type == "deposit":
+            return Deposit(self)
+
+        if frame_type == "withdraw":
+            return Withdraw(self)
+
+        if frame_type == "transference":
+            return Transference(self)
+
+    def display_frame(
+        self,
+        menu_type,
+    ) -> None:
         try:
             self.displayed_frame.destroy()
         except:
             pass
-        self.displayed_frame = Login(self)
-        self.displayed_frame.grid(
-            row=0,
-            column=1,
-        )
-
-    def display_sign_up(self) -> None:
-        try:
-            self.displayed_frame.destroy()
-        except:
-            pass
-        self.displayed_frame = SignUp(self)
-        self.displayed_frame.grid(
-            row=0,
-            column=1,
-        )
-
-    def display_check_account(self) -> None:
-        try:
-            self.displayed_frame.destroy()
-        except:
-            pass
-        self.displayed_frame = CheckAccount(self)
-        self.displayed_frame.grid(
-            row=0,
-            column=1,
-        )
-
-    def display_logged_menu_frame(self) -> None:
-        self.menu_frame.display_logged_menu_()
-
-    def display_view_account(self) -> None:
-        try:
-            self.displayed_frame.destroy()
-        except:
-            pass
-        self.displayed_frame = ViewAccount(self)
-        self.displayed_frame.grid(
-            row=0,
-            column=1,
-        )
-
-    def display_deposit(self) -> None:
-        try:
-            self.displayed_frame.destroy()
-        except:
-            pass
-        self.displayed_frame = Deposit(self)
-        self.displayed_frame.grid(
-            row=0,
-            column=1,
-        )
-
-    def display_withdraw(self) -> None:
-        try:
-            self.displayed_frame.destroy()
-        except:
-            pass
-        self.displayed_frame = Withdraw(self)
-        self.displayed_frame.grid(
-            row=0,
-            column=1,
-        )
-
-    def display_transferance(self) -> None:
-        try:
-            self.displayed_frame.destroy()
-        except:
-            pass
-        self.displayed_frame = Transference(self)
+        self.displayed_frame = self.create_frame(menu_type)
         self.displayed_frame.grid(
             row=0,
             column=1,

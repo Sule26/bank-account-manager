@@ -9,14 +9,18 @@ class MainMenu(ctk.CTkFrame):
     def __init__(self, parent: ctk.CTk) -> None:
         super().__init__(master=parent)
         self.parent = parent
-        self.grid_rowconfigure(2, weight=1)
-
+        self.grid_rowconfigure(3, weight=1)
 
         # Create widgets
-        self.login_button = ctk.CTkButton(
+        self.sign_in_button = ctk.CTkButton(
             master=self,
-            text="Login",
-            command=lambda: self.parent.display_login(),
+            text="Sign In",
+            command=lambda: self.parent.display_frame(menu_type="sign_in"),
+        )
+        self.sign_up_button = ctk.CTkButton(
+            master=self,
+            text="Sign Up",
+            command=lambda: parent.display_frame(menu_type="sign_up"),
         )
         self.faq_button = ctk.CTkButton(
             master=self,
@@ -28,33 +32,39 @@ class MainMenu(ctk.CTkFrame):
         )
         self.apperance_mode_openmenu = ctk.CTkOptionMenu(
             master=self,
-            values=["Light", "Dark", "System"],
+            values=["Light", "Dark"],
             command=self.change_appearance_mode,
         )
 
         # Set default
-        self.apperance_mode_openmenu.set("Dark")
+        self.apperance_mode_openmenu.set(ctk.get_appearance_mode())
 
         # Set layout
-        self.login_button.grid(
+        self.sign_in_button.grid(
             row=0,
             column=0,
             padx=10,
             pady=(30, 10),
         )
-        self.faq_button.grid(
+        self.sign_up_button.grid(
             row=1,
             column=0,
             padx=10,
             pady=10,
         )
+        self.faq_button.grid(
+            row=2,
+            column=0,
+            padx=10,
+            pady=10,
+        )
         self.apperance_mode_label.grid(
-            row=3,
+            row=4,
             column=0,
             padx=10,
         )
         self.apperance_mode_openmenu.grid(
-            row=4,
+            row=5,
             column=0,
             padx=10,
             pady=(10, 30),

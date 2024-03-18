@@ -15,34 +15,34 @@ class LoggedInMenu(ctk.CTkFrame):
         self.view_account_button = ctk.CTkButton(
             master=self,
             text="View Account",
-            command=lambda: self.parent.display_view_account(),
+            command=lambda: self.parent.display_frame(menu_type="view_account"),
         )
         self.deposit_button = ctk.CTkButton(
             master=self,
             text="Deposit",
-            command=lambda: self.parent.display_deposit(),
+            command=lambda: self.parent.display_frame(menu_type="deposit"),
         )
         self.withdraw_button = ctk.CTkButton(
             master=self,
             text="Withdraw",
-            command=lambda: self.parent.display_withdraw(),
+            command=lambda: self.parent.display_frame(menu_type="withdraw"),
         )
         self.transference_button = ctk.CTkButton(
             master=self,
             text="Transference",
-            command=lambda: self.parent.display_transferance(),
+            command=lambda: self.parent.display_frame(menu_type="transference"),
         )
         self.watch_account_button = ctk.CTkButton(
             master=self,
             text="Check Account",
-            command=lambda: self.parent.display_check_account(),
+            command=lambda: self.parent.display_frame(menu_type="check_account"),
         )
         self.log_out_button = ctk.CTkButton(
             master=self,
             text="Logout",
             command=lambda: [
-                self.parent.display_login(),
                 self.disconnect(),
+                self.parent.display_frame(menu_type="sign_in"),
                 self.parent.display_menu(menu_type="main"),
             ],
         )
@@ -52,9 +52,12 @@ class LoggedInMenu(ctk.CTkFrame):
         )
         self.apperance_mode_openmenu = ctk.CTkOptionMenu(
             master=self,
-            values=["Light", "Dark", "System"],
+            values=["Light", "Dark"],
             command=self.change_appearance_mode,
         )
+
+        # Set default
+        self.apperance_mode_openmenu.set(ctk.get_appearance_mode())
 
         # Set layout
         self.view_account_button.grid(
