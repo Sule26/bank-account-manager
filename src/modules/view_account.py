@@ -173,6 +173,15 @@ class ViewAccount(ctk.CTkFrame):
         )
 
         # Create widgets from account_info_frame
+        self.account_number_label = ctk.CTkLabel(
+            master=self.account_info_frame,
+            text="Account Number:",
+            font=(FONT_NAME, FONT_SIZE_TEXT),
+        )
+        self.account_number_result = ctk.CTkLabel(
+            master=self.account_info_frame,
+            font=(FONT_NAME, FONT_SIZE_TEXT),
+        )
         self.bank_label = ctk.CTkLabel(
             master=self.account_info_frame,
             text="Bank:",
@@ -202,39 +211,51 @@ class ViewAccount(ctk.CTkFrame):
         )
 
         # Set layout from account_info_frame
-        self.bank_label.grid(
+        self.account_number_label.grid(
             row=0,
             column=0,
             padx=20,
             pady=5,
         )
-        self.bank_result.grid(
+        self.account_number_result.grid(
             row=0,
             column=1,
             padx=20,
             pady=5,
         )
-        self.account_type_label.grid(
+        self.bank_label.grid(
             row=1,
             column=0,
             padx=20,
             pady=5,
         )
-        self.account_type_result.grid(
+        self.bank_result.grid(
             row=1,
+            column=1,
+            padx=20,
+            pady=5,
+        )
+        self.account_type_label.grid(
+            row=2,
+            column=0,
+            padx=20,
+            pady=5,
+        )
+        self.account_type_result.grid(
+            row=2,
             column=1,
             padx=20,
             pady=5,
             sticky="we",
         )
         self.balance_label.grid(
-            row=2,
+            row=3,
             column=0,
             padx=20,
             pady=5,
         )
         self.balance_result.grid(
-            row=2,
+            row=3,
             column=1,
             padx=20,
             pady=5,
@@ -251,4 +272,5 @@ class ViewAccount(ctk.CTkFrame):
         self.account_type_result.configure(
             text=f"{self.parent.account.account_type.name}"
         )
+        self.account_number_result.configure(text=f"{self.parent.account.number}")
         self.balance_result.configure(text=f"${self.parent.account.balance:.2f}")
