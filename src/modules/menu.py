@@ -23,11 +23,6 @@ class Menu(ctk.CTkFrame):
             text="Login",
             command=lambda: self.parent.display_login(),
         )
-        self.watch_account_button = ctk.CTkButton(
-            master=self,
-            text="Check Account",
-            command=lambda: self.parent.display_check_account(),
-        )
         self.faq_button = ctk.CTkButton(
             master=self,
             text="FAQ",
@@ -52,25 +47,19 @@ class Menu(ctk.CTkFrame):
             padx=10,
             pady=(30, 10),
         )
-        self.watch_account_button.grid(
+        self.faq_button.grid(
             row=1,
             column=0,
             padx=10,
             pady=10,
         )
-        self.faq_button.grid(
-            row=2,
-            column=0,
-            padx=10,
-            pady=10,
-        )
         self.apperance_mode_label.grid(
-            row=5,
+            row=6,
             column=0,
             padx=10,
         )
         self.apperance_mode_openmenu.grid(
-            row=6,
+            row=7,
             column=0,
             padx=10,
             pady=(10, 30),
@@ -100,6 +89,10 @@ class Menu(ctk.CTkFrame):
             text="Transference",
             command=lambda: self.parent.display_transferance(),
         )
+        self.watch_account_button = ctk.CTkButton(
+            master=self,
+            text="Check Account",
+            command=lambda: self.parent.display_check_account(),
         )
         self.apperance_mode_label = ctk.CTkLabel(
             master=self,
@@ -136,16 +129,22 @@ class Menu(ctk.CTkFrame):
             padx=10,
             pady=10,
         )
+        self.watch_account_button.grid(
+            row=4,
+            column=0,
+            padx=10,
+            pady=10,
+        )
 
     def grid_forget_logged_menu(self) -> None:
         self.view_account_button.grid_forget()
         self.deposit_button.grid_forget()
         self.withdraw_button.grid_forget()
         self.transference_button.grid_forget()
+        self.watch_account_button.grid_forget()
 
     def grid_forget_main_menu(self) -> None:
         self.login_button.grid_forget()
-        self.watch_account_button.grid_forget()
         self.faq_button.grid_forget()
 
     def change_appearance_mode(self, new_appearance_mode: str) -> None:

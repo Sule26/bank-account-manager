@@ -99,13 +99,13 @@ class Withdraw(ctk.CTkFrame):
             pady=20,
         )
 
-    def withdraw(self):
+    def withdraw(self) -> None:
         if self.check_entry(
             entry=self.value_to_withdraw_entry,
             warning_label=self.value_to_withdraw_warning,
         ):
             self.parent.account.withdrawal(
-                value=int(self.value_to_withdraw_entry.get())
+                value=float(self.value_to_withdraw_entry.get())
             )
             self.parent.update_object_account()
             self.current_balance_result.configure(
@@ -117,7 +117,7 @@ class Withdraw(ctk.CTkFrame):
         self,
         entry: ctk.CTkEntry,
         warning_label: ctk.CTkLabel,
-    ) -> None:
+    ) -> bool:
         warning_label.grid(
             row=3,
             column=1,
@@ -135,7 +135,7 @@ class Withdraw(ctk.CTkFrame):
             return False
 
         if not self.parent.account.is_withdrawal_possible(
-            value=int(self.value_to_withdraw_entry.get()),
+            value=float(self.value_to_withdraw_entry.get()),
             withdraw_fee=self.parent.account.get_withdraw_fee(),
         ):
             warning_label.configure(text="* Not enough money to withdraw")

@@ -101,7 +101,7 @@ class CheckAccount(ctk.CTkFrame):
 
         account_row = session.execute(stmt).scalars().first()
 
-        self.account_table.add_row([account_row.number, account_row.balance])
+        self.account_table.add_row([account_row.number, f"${account_row.balance:.2f}"])
 
         self.account_table.grid(
             row=3,

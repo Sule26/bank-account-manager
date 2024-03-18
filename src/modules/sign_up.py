@@ -392,7 +392,7 @@ class SignUp(ctk.CTkFrame):
             )
             minimum_initial_balance = session.execute(stmt).scalars().first()
 
-            if int(entry.get()) < minimum_initial_balance:
+            if float(entry.get()) < minimum_initial_balance:
 
                 warning_label.configure(
                     text=f"* Minimum balance is ${minimum_initial_balance:.2f}"

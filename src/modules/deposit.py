@@ -103,7 +103,7 @@ class Deposit(ctk.CTkFrame):
             entry=self.value_to_deposit_entry,
             warning_label=self.value_to_deposit_warning,
         ):
-            self.parent.account.deposit(value=int(self.value_to_deposit_entry.get()))
+            self.parent.account.deposit(value=float(self.value_to_deposit_entry.get()))
             self.parent.update_object_account()
             self.current_balance_result.configure(
                 text=f"${self.parent.account.balance:.2f}"
@@ -114,7 +114,7 @@ class Deposit(ctk.CTkFrame):
         self,
         entry: ctk.CTkEntry,
         warning_label: ctk.CTkLabel,
-    ) -> None:
+    ) -> bool:
         warning_label.grid(
             row=3,
             column=1,
