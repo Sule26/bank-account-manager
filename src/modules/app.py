@@ -7,8 +7,9 @@ from ..models.account import Account
 from ..models.uris import MYSQL_URI, POSTGRES_URI
 from .check_account import CheckAccount
 from .deposit import Deposit
+from .logged_in_menu import LoggedInMenu
 from .login import Login
-from .menu import Menu
+from .main_menu import MainMenu
 from .sign_up import SignUp
 from .transference import Transference
 from .view_account import ViewAccount
@@ -40,16 +41,29 @@ class App(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=5)
 
-        self.menu_frame = Menu(self)
-        self.menu_frame.grid_rowconfigure(5, weight=1)
-        self.menu_frame.grid(
+        self.display_menu(menu_type="main")
+        self.display_login()
+
+        self.mainloop()
+
+    def create_menu(self, menu_type: str):
+        if menu_type == "main":
+            return MainMenu(self)
+
+        if menu_type == "logged_in":
+            return LoggedInMenu(self)
+
+    def display_menu(self, menu_type) -> None:
+        try:
+            self.displayed_menu.destroy()
+        except:
+            pass
+        self.displayed_menu = self.create_menu(menu_type=menu_type)
+        self.displayed_menu.grid(
             row=0,
             column=0,
             sticky="nsw",
         )
-        self.display_login()
-
-        self.mainloop()
 
     def display_login(self) -> None:
         try:

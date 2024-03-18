@@ -162,7 +162,7 @@ class Login(ctk.CTkFrame):
                 return
 
             self.login_warning.grid_forget()
-            parent.display_logged_menu_frame()
+            parent.display_menu(menu_type="logged_in")
             parent.display_view_account()
 
     def check_entry(
