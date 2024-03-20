@@ -76,8 +76,6 @@ class SignIn(ctk.CTkFrame):
                     self.username_entry.get(),
                     self.password_entry.get(),
                 ),
-                parent.display_menu(menu_type="logged_in"),
-                parent.display_frame(menu_type="view_account"),
             ],
         )
 
@@ -155,6 +153,8 @@ class SignIn(ctk.CTkFrame):
                 return
 
             self.sign_in_warning.grid_forget()
+            parent.display_menu(menu_type="logged_in"),
+            parent.display_frame(menu_type="view_account"),
 
     def check_entry(
         self,
