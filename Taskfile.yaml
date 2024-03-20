@@ -2,7 +2,7 @@ version: "3"
 dotenv:
   - .local.env
 vars:
-  MICROMAMBA_ENV: bank-system
+  MICROMAMBA_ENV: bank-account-manager
   MICROMAMBA_FILE: "{{.MICROMAMBA_ENV}}.env.yaml"
 tasks:
   env:set:
@@ -37,7 +37,7 @@ tasks:
   app:
     deps:
       - env:set
-    cmd: micromamba -n '{{.MICROMAMBA_ENV}}' run python -m src
+    cmd: micromamba -n '{{.MICROMAMBA_ENV}}' run python -m src.modules
   generate:schemas:
     deps:
       - env:set
